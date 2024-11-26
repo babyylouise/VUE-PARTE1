@@ -116,79 +116,87 @@ export default {
 </script>
 
 <style scoped>
+/* Fontes modernas */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Pacifico&display=swap');
+
 .school-edit {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-  font-size: 1.8rem;
+  font-family: 'Pacifico', cursive;
+  font-size: 2rem;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   text-align: center;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
+  font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   color: #333;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .form-group input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 1rem;
+  font-family: 'Roboto', sans-serif;
 }
 
 .form-group input:focus {
-  border-color: #4CAF50;
+  border-color: #6C63FF;
   outline: none;
 }
 
 .form-buttons {
   display: flex;
   justify-content: space-between;
+  gap: 20px;
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 12px 25px;
   font-size: 1rem;
-  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  border-radius: 50px;
   cursor: pointer;
-  width: 48%;
-  transition: background-color 0.3s, transform 0.2s ease-in-out;
+  color: white;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .save {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-}
-
-.save:hover {
-  background-color: #45a049;
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
 }
 
 .cancel {
-  background-color: #f44336;
-  color: white;
-  border: none;
+  background: linear-gradient(135deg, #F44336, #E53935);
 }
 
-.cancel:hover {
-  background-color: #e53935;
+.btn:hover {
   transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+i {
+  font-size: 1.2rem;
 }
 </style>

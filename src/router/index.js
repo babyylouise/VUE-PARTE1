@@ -28,6 +28,7 @@ const routes = [
     component: SchoolEdit,  // Componente que será mostrado na edição
     props: true,  // Permite passar o id como uma prop
   }
+  
   ];
 
 const router = createRouter({

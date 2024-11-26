@@ -1,125 +1,128 @@
 <template>
-  <header class="school-header">
-    <div class="header-content">
-      <h1>{{ title }}</h1>
-      <p class="subtitle">{{ subtitle }}</p>
+  <div class="delete-confirmation">
+    <!-- Cabeçalho -->
+    <SchoolHeader 
+      title="Excluir Escola" 
+      :backRoute="'/escolas'" 
+    />
+
+    <!-- Mensagem de Confirmação -->
+    <div class="confirmation-message">
+      <h2>Tem certeza que deseja excluir esta escola?</h2>
+      <p>Você está prestes a excluir a escola <strong>{{ school.name }}</strong>. Essa ação não pode ser desfeita.</p>
+
+      <div class="buttons">
+        <button @click="confirmDelete" class="btn confirm">Confirmar</button>
+        <button @click="cancelDelete" class="btn cancel">Cancelar</button>
+      </div>
     </div>
-    <div class="actions">
-      <button @click="onCreate" class="btn create">
-        <i class="fas fa-plus"></i> Criar
-      </button>
-      <button @click="onEdit" class="btn edit">
-        <i class="fas fa-pen"></i> Editar
-      </button>
-      <button @click="onDelete" class="btn delete">
-        <i class="fas fa-trash"></i> Apagar
-      </button>
-    </div>
-  </header>
+  </div>
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import SchoolHeader from "@/components/SchoolHeader.vue";
+
 export default {
-  props: {
-    title: {
-      type: String,
-      required: true,
-      default: "Gerenciamento",
-    },
-    subtitle: {
-      type: String,
-      required: false,
-      default: "Organize tudo de forma eficiente.",
-    },
+  components: {
+    SchoolHeader,
   },
-  emits: ["create", "edit", "delete"],
-  methods: {
-    onCreate() {
-      this.$emit("create");
-    },
-    onEdit() {
-      this.$emit("edit");
-    },
-    onDelete() {
-      this.$emit("delete");
-    },
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+    const school = ref({
+      id: null,
+      name: '',
+    });
+
+    // Quando o componente for montado, carregue os dados da escola
+    onMounted(() => {
+      const schoolId = route.params.id;
+      console.log(`Carregando dados da escola com ID: ${schoolId}`);
+      
+      // Aqui você carregaria os dados da escola via API ou outra fonte
+      school.value = {
+        id: schoolId,
+        name: 'Escola Exemplo',
+      };
+    });
+
+    const confirmDelete = () => {
+      console.log(`Escola com ID ${school.value.id} excluída.`);
+      // Adicione aqui a lógica para excluir a escola, como uma requisição para o backend
+      router.push('/escolas'); // Redireciona para a lista de escolas
+    };
+
+    const cancelDelete = () => {
+      router.push('/escolas'); // Redireciona para a lista de escolas sem excluir
+    };
+
+    return {
+      school,
+      confirmDelete,
+      cancelDelete,
+    };
   },
 };
 </script>
 
 <style scoped>
-/* Fontes modernas */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Pacifico&display=swap');
+.delete-confirmation {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-/* Cabeçalho geral */
-.school-header {
-  background: linear-gradient(135deg, #6C63FF, #8490F7);
-  color: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+.confirmation-message h2 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 10px;
   text-align: center;
 }
 
-.header-content {
+.confirmation-message p {
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.school-header h1 {
-  font-family: 'Pacifico', cursive;
-  font-size: 2.5rem;
-  margin: 0;
-}
-
-.subtitle {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1.2rem;
-  margin: 5px 0;
-  opacity: 0.85;
-}
-
-/* Ações (botões) */
-.actions {
+.buttons {
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  justify-content: space-around;
 }
 
 .btn {
-  padding: 12px 25px;
+  padding: 10px 20px;
   font-size: 1rem;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
-  border: none;
-  border-radius: 50px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s;
+}
+
+.confirm {
+  background-color: #f44336;
   color: white;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
-.btn.create {
-  background: #4CAF50;
-}
-
-.btn.edit {
-  background: #FFC107;
-}
-
-.btn.delete {
-  background: #F44336;
-}
-
-.btn:hover {
+.confirm:hover {
+  background-color: #e53935;
   transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Ícones */
-i {
-  font-size: 1.2rem;
+.cancel {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+}
+
+.cancel:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
 }
 </style>
