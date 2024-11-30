@@ -2,8 +2,16 @@
   <div class="crud-container">
     <h2>Gerenciamento de Alunos</h2>
 
+    <!-- Cabeçalho da Tabela -->
+    <div class="crud-header">
+      <span>ID</span>
+      <span>Nome</span>
+      <span>Ações</span>
+    </div>
+
     <!-- Lista de alunos -->
     <div v-for="aluno in alunos" :key="aluno.id" class="crud-item">
+      <span>{{ aluno.id }}</span>
       <span>{{ aluno.nome }}</span>
       <!-- Botões de Ações -->
       <div class="crud-actions">
@@ -81,9 +89,23 @@ h2 {
   margin-bottom: 20px;
 }
 
+/* Cabeçalho da tabela */
+.crud-header {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  width: 100%;
+  max-width: 500px;
+  background-color: #6C63FF;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
 .crud-item {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
   background: #fff;
   padding: 10px 20px;

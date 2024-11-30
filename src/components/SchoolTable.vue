@@ -4,7 +4,8 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Nome</th>
+          <th>Nome Da Escola</th>
+          <th>Nome do Diretor</th>
           <th>Localização</th>
           <th>Ações</th>
         </tr>
@@ -12,8 +13,9 @@
       <tbody>
         <tr v-for="school in schools" :key="school.id">
           <td>{{ school.id }}</td>
-          <td>{{ school.name }}</td>
+          <td>{{ school.principalName }}</td>
           <td>{{ school.location }}</td>
+          <td>{{ school.schoolName }}</td>
           <td class="actions">
             <button class="btn create" @click="$emit('create-student', school.id)">Aluno</button>
             <button class="btn edit" @click="$emit('edit-school', school.id)">Editar</button>

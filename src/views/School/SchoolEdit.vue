@@ -9,30 +9,30 @@
         <input
           type="text"
           id="name"
-          v-model="school.name"
+          v-model="school.schoolName"
           placeholder="Nome da escola"
           required
         />
       </div>
 
       <div class="form-group">
-        <label for="address">Endereço</label>
+        <label for="address">Nome do Diretor</label>
         <input
           type="text"
           id="address"
-          v-model="school.address"
-          placeholder="Endereço da escola"
+          v-model="school.principalName"
+          placeholder="Nome do diretor"
           required
         />
       </div>
 
       <div class="form-group">
-        <label for="contact">Contato</label>
+        <label for="contact">Localização</label>
         <input
           type="text"
           id="contact"
-          v-model="school.contact"
-          placeholder="Contato da escola"
+          v-model="school.location"
+          placeholder="Localização da escola"
           required
         />
       </div>
@@ -48,6 +48,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';  // Importando o Axios
 
 export default {
   setup() {
@@ -56,9 +57,9 @@ export default {
 
     const school = ref({
       id: null,
-      name: '',
-      address: '',
-      contact: '',
+      schoolName: '',
+      principalName: '',
+      location: '',
     });
 
     // Quando o componente for montado, busque os dados da escola usando o id da URL
@@ -66,13 +67,14 @@ export default {
       const schoolId = route.params.id;
       console.log(`Carregando dados para a escola com id: ${schoolId}`);
 
-      // Simulação de dados carregados da API
-      school.value = {
-        id: schoolId,
-        name: 'Escola Exemplo',
-        address: 'Rua Exemplo, 123',
-        contact: '(11) 1111-1111',
-      };
+      // Requisição GET para buscar os dados da escola
+      axios.get(`http://localhost:8080/school/${schoolId}`)
+        .then(response => {
+          school.value = response.data;  // Preenche os dados da escola com a resposta
+        })
+        .catch(error => {
+          console.error('Erro ao carregar dados da escola:', error);
+        });
     });
 
     const saveChanges = () => {

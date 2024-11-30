@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/Home.vue';  // Certifique-se de que o caminho esteja correto
-import Escolas from '@/views/Escolas.vue';
+import Escolas from '@/views/School/Escolas.vue';
 import Alunos from '@/views/Alunos.vue';
-import SchoolEdit from '@/views/SchoolEdit.vue';
+import SchoolEdit from '@/views/School/SchoolEdit.vue';
+import SchoolCreate from '../views/School/SchoolCreate.vue';
 
 
 
@@ -27,6 +28,11 @@ const routes = [
     name: 'SchoolEdit',
     component: SchoolEdit,  // Componente que será mostrado na edição
     props: true,  // Permite passar o id como uma prop
+  },{
+    path: '/escolas/create/',  // Definindo a rota de edição com parâmetro :id
+    name: 'SchoolCreate',
+    component: SchoolCreate,
+    props: false,  // Permite passar o id como uma prop
   }
   
   ];
