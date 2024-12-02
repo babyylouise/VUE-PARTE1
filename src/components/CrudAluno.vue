@@ -1,190 +1,127 @@
 <template>
-  <div class="crud-container">
-    <h2>Gerenciamento de Alunos</h2>
-
-    <!-- Cabeçalho da Tabela -->
-    <div class="crud-header">
-      <span>ID</span>
-      <span>Nome</span>
-      <span>Ações</span>
-    </div>
-
-    <!-- Lista de alunos -->
-    <div v-for="aluno in alunos" :key="aluno.id" class="crud-item">
-      <span>{{ aluno.id }}</span>
-      <span>{{ aluno.nome }}</span>
-      <!-- Botões de Ações -->
-      <div class="crud-actions">
-        <!-- Botão Editar -->
-        <button class="btn edit" @click="editAluno(aluno.id)">Editar</button>
-        <!-- Botão Deletar -->
-        <button class="btn delete" @click="deleteAluno(aluno.id)">Deletar</button>
-      </div>
-    </div>
-
-    <!-- Campo para adicionar novo aluno -->
-    <div class="add-aluno">
-      <input v-model="newAluno" placeholder="Adicionar novo aluno" class="input-field"/>
-      <button @click="addAluno" class="btn add">Adicionar Aluno</button>
-    </div>
+  <div class="student-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Idade</th>
+          <th>Gênero</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="student in students" :key="student.id">
+          <td>{{ student.id }}</td>
+          <td>{{ student.name }}</td>
+          <td>{{ student.gender }}</td>
+          <td>{{ student.age }}</td>
+          <td class="actions">
+            <button class="btn edit" @click="$emit('edit-student', student.id)">Editar</button>
+            <button class="btn delete" @click="confirmDelete(student.id)">Apagar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-
-const alunos = ref([
-  { id: 1, nome: 'Aluno 1' },
-  { id: 2, nome: 'Aluno 2' }
-]);
-
-const newAluno = ref('');
-
-// Função para adicionar aluno
-const addAluno = () => {
-  if (newAluno.value.trim() !== '') {
-    alunos.value.push({
-      id: alunos.value.length + 1,
-      nome: newAluno.value
-    });
-    newAluno.value = ''; // Limpa o campo
-  }
-};
-
-// Função para deletar aluno
-const deleteAluno = (id) => {
-  const index = alunos.value.findIndex(aluno => aluno.id === id);
-  if (index !== -1) {
-    alunos.value.splice(index, 1);
-  }
-};
-
-// Função para editar aluno
-const editAluno = (id) => {
-  const aluno = alunos.value.find(a => a.id === id);
-  if (aluno) {
-    const newName = prompt("Editar nome do aluno:", aluno.nome);
-    if (newName) {
-      aluno.nome = newName;
+<script>
+export default {
+  props: {
+    students: {
+      type: Array,
+      required: true,
+    },
+  },
+  methods: {
+    confirmDelete(studentId) {
+      const isConfirmed = window.confirm("Você tem certeza que deseja deletar este aluno?");
+      if (isConfirmed) {
+        // Emitir o evento de deletar a escola se o usuário confirmar
+        this.$emit('delete-student', studentId);
+      } else {
+        // Caso o usuário cancele, não fazemos nada, o prompt apenas desaparece
+        console.log("O aluno não foi deletado.");
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-.crud-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: linear-gradient(135deg, #f9f9f9, #e9ecef);
-  min-height: 100vh;
+.student-table {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
   padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  text-align: left;
+  padding: 15px;
   font-family: 'Roboto', sans-serif;
 }
 
-h2 {
-  font-size: 2rem;
-  font-family: 'Pacifico', cursive;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-/* Cabeçalho da tabela */
-.crud-header {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  width: 100%;
-  max-width: 500px;
-  background-color: #6C63FF;
+th {
+  background: linear-gradient(135deg, #6C63FF, #8490F7);
   color: white;
-  padding: 10px;
-  font-weight: bold;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  font-weight: 600;
 }
 
-.crud-item {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  align-items: center;
-  background: #fff;
-  padding: 10px 20px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
+tr:nth-child(even) {
+  background: #f9f9f9;
 }
 
-.crud-actions {
+.actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .btn {
-  padding: 8px 15px;
-  border-radius: 50px;
-  font-size: 0.9rem;
-  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
   border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn.create {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
 }
 
 .btn.edit {
-  background-color: #FFC107;
-  color: white;
-}
-
-.btn.edit:hover {
-  background-color: #FFCA28;
+  background: linear-gradient(135deg, #FFC107, #FFCA28);
 }
 
 .btn.delete {
-  background-color: #F44336;
-  color: white;
+  background: linear-gradient(135deg, #F44336, #E53935);
 }
 
-.btn.delete:hover {
-  background-color: #D32F2F;
-}
-
-.add-aluno {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.input-field {
-  padding: 10px;
-  border-radius: 50px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  width: 250px;
-  transition: border-color 0.3s ease;
-}
-
-.input-field:focus {
-  outline: none;
-  border-color: #6C63FF;
-}
-
-.btn.add {
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #6C63FF, #8490F7);
-  color: white;
-  border-radius: 50px;
-  font-size: 1.1rem;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: none;
-}
-
-.btn.add:hover {
-  background: linear-gradient(135deg, #5753FF, #737EFA);
+.btn:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+i {
+  font-size: 1.2rem;
 }
 </style>
