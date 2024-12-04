@@ -1,4 +1,9 @@
 <template>
+  <div class="create-student-button">
+      <button @click="createStudent">Inserir novo Aluno</button>
+    </div>
+
+
   <div class="student-table">
     <table>
       <thead>
@@ -17,16 +22,18 @@
           <td>{{ student.gender }}</td>
           <td>{{ student.age }}</td>
           <td class="actions">
-            <button class="btn edit" @click="$emit('edit-student', student.id)">Editar</button>
-            <button class="btn delete" @click="confirmDelete(student.id)">Apagar</button>
+            <button class="btn edit" @click="$emit('edit-student', student.id)">Detalhes</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+
 </template>
 
 <script>
+import StudentInsert from "@/views/Student/StudentInsert.vue";
+
 export default {
   props: {
     students: {
@@ -35,16 +42,9 @@ export default {
     },
   },
   methods: {
-    confirmDelete(studentId) {
-      const isConfirmed = window.confirm("Você tem certeza que deseja deletar este aluno?");
-      if (isConfirmed) {
-        // Emitir o evento de deletar a escola se o usuário confirmar
-        this.$emit('delete-student', studentId);
-      } else {
-        // Caso o usuário cancele, não fazemos nada, o prompt apenas desaparece
-        console.log("O aluno não foi deletado.");
-      }
-    }
+  createStudent(){
+    this.$router.push({ name: 'StudentInsert'});
+ },
   }
 };
 </script>
@@ -114,6 +114,27 @@ tr:nth-child(even) {
 
 .btn.delete {
   background: linear-gradient(135deg, #F44336, #E53935);
+}
+.create-student-button {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center; /* Centralizando o botão */
+}
+.create-student-button button {
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+  margin-top: 20px;
+  
+}
+.create-student-button button:hover{
+  background-color: #45a049;
 }
 
 .btn:hover {

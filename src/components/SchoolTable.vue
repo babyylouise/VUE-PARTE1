@@ -17,9 +17,7 @@
           <td>{{ school.location }}</td>
           <td>{{ school.schoolName }}</td>
           <td class="actions">
-            <button class="btn create" @click="$emit('create-student', school.id)">Aluno</button>
-            <button class="btn edit" @click="$emit('edit-school', school.id)">Editar</button>
-            <button class="btn delete" @click="confirmDelete(school.id)">Apagar</button>
+            <button class="btn edit" @click="$emit('edit-school', school.id)">Detalhes</button>
           </td>
         </tr>
       </tbody>

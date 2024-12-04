@@ -54,7 +54,6 @@ export default {
       console.log(`Criar novo aluno para a escola ${schoolId}`);
     },
     editSchool(schoolId) {
-      // Usando o Vue Router para navegar para a página de edição
       this.$router.push({ name: 'SchoolEdit', params: { id: schoolId } });
     },
     deleteSchool(schoolId) {

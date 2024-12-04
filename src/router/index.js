@@ -5,6 +5,7 @@ import SchoolEdit from '@/views/School/SchoolEdit.vue';
 import SchoolCreate from '../views/School/SchoolCreate.vue';
 import Alunos from '../views/Student/Alunos.vue';
 import EditAluno from '../views/Student/editAluno.vue';
+import StudentInsert from '../views/Student/StudentInsert.vue';
 
 
 
@@ -39,6 +40,11 @@ const routes = [
     name: 'editAluno',
     component: EditAluno,
     props: true,  // Permite passar o id como uma prop
+  },{
+    path: '/estudante/create',  // Definindo a rota de edição com parâmetro :id
+    name: 'StudentInsert',
+    component: StudentInsert,
+    props: false,  // Permite passar o id como uma prop
   }
   
   ];

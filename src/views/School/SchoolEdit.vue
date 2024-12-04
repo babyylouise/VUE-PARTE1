@@ -1,54 +1,32 @@
 <template>
-  <div class="school-edit">
-    <h2>Editar Escola</h2>
+  <div class="school-details">
+    <h2>Detalhes da Escola</h2>
 
-    <!-- Formulário de edição -->
-    <form @submit.prevent="saveChanges">
-      <div class="form-group">
-        <label for="name">Nome da Escola</label>
-        <input
-          type="text"
-          id="name"
-          v-model="school.schoolName"
-          placeholder="Nome da escola"
-          required
-        />
+    <div class="details">
+      <div class="detail-item">
+        <strong>Nome da Escola: </strong>
+        <span>{{ school.schoolName }}</span>
       </div>
+      <div class="detail-item">
+        <strong>Nome do Diretor: </strong>
+        <span>{{ school.principalName }}</span>
+      </div>
+      <div class="detail-item">
+        <strong>Localização: </strong>
+        <span>{{ school.location }}</span>
+      </div>
+    </div>
 
-      <div class="form-group">
-        <label for="address">Nome do Diretor</label>
-        <input
-          type="text"
-          id="address"
-          v-model="school.principalName"
-          placeholder="Nome do diretor"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="contact">Localização</label>
-        <input
-          type="text"
-          id="contact"
-          v-model="school.location"
-          placeholder="Localização da escola"
-          required
-        />
-      </div>
-
-      <div class="form-buttons">
-        <button type="submit" class="btn save" @mouseover="hoverSave" @mouseleave="resetButton">Salvar</button>
-        <button type="button" @click="cancelEdit" class="btn cancel" @mouseover="hoverCancel" @mouseleave="resetButton">Cancelar</button>
-      </div>
-    </form>
+    <div class="view-buttons">
+      <button @click="goBack" class="btn back">Voltar</button>
+    </div>
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';  // Importando o Axios
+import axios from 'axios';
 
 export default {
   setup() {
@@ -62,66 +40,37 @@ export default {
       location: '',
     });
 
-    // Quando o componente for montado, busque os dados da escola usando o id da URL
+    // Ao montar o componente, buscar os dados da escola
     onMounted(() => {
       const schoolId = route.params.id;
-      console.log(`Carregando dados para a escola com id: ${schoolId}`);
+      console.log(`Carregando detalhes da escola com ID: ${schoolId}`);
 
-      // Requisição GET para buscar os dados da escola
+      // Requisição GET para obter os detalhes da escola
       axios.get(`http://localhost:8080/school/${schoolId}`)
         .then(response => {
-          school.value = response.data;  // Preenche os dados da escola com a resposta
+          school.value = response.data;
         })
         .catch(error => {
-          console.error('Erro ao carregar dados da escola:', error);
+          console.error('Erro ao carregar detalhes da escola:', error);
         });
     });
 
-    const saveChanges = () => {
-      console.log('Escola editada com sucesso:', school.value);
-      // Lógica para salvar a escola, como uma requisição para um backend
-      router.push('/escolas');  // Redireciona para a lista de escolas
-    };
-
-    const cancelEdit = () => {
-      router.push('/escolas');  // Redireciona para a lista de escolas
-    };
-
-    // Funções para animação dos botões
-    const hoverSave = (event) => {
-      event.target.style.backgroundColor = '#45a049'; // Mudança de cor ao passar o mouse
-    };
-
-    const hoverCancel = (event) => {
-      event.target.style.backgroundColor = '#e53935'; // Mudança de cor ao passar o mouse
-    };
-
-    const resetButton = (event) => {
-      // Resetando a cor para a inicial quando o mouse sai
-      if (event.target.classList.contains('save')) {
-        event.target.style.backgroundColor = '#4CAF50';
-      } else if (event.target.classList.contains('cancel')) {
-        event.target.style.backgroundColor = '#f44336';
-      }
+    const goBack = () => {
+      router.push('/escolas'); // Redirecionar para a lista de escolas
     };
 
     return {
       school,
-      saveChanges,
-      cancelEdit,
-      hoverSave,
-      hoverCancel,
-      resetButton,
+      goBack,
     };
   },
 };
 </script>
 
 <style scoped>
-/* Fontes modernas */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Pacifico&display=swap');
 
-.school-edit {
+.school-details {
   max-width: 600px;
   margin: 0 auto;
   padding: 30px;
@@ -138,36 +87,25 @@ h2 {
   text-align: center;
 }
 
-.form-group {
-  margin-bottom: 20px;
+.details {
+  margin-bottom: 30px;
 }
 
-.form-group label {
+.detail-item {
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.detail-item strong {
   color: #333;
-  display: block;
-  margin-bottom: 10px;
+  font-weight: bold;
 }
 
-.form-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: 'Roboto', sans-serif;
-}
-
-.form-group input:focus {
-  border-color: #6C63FF;
-  outline: none;
-}
-
-.form-buttons {
+.view-buttons {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: center;
 }
 
 .btn {
@@ -178,27 +116,13 @@ h2 {
   border-radius: 50px;
   cursor: pointer;
   color: white;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  background: linear-gradient(135deg, #6C63FF, #857FFF);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.save {
-  background: linear-gradient(135deg, #4CAF50, #66BB6A);
-}
-
-.cancel {
-  background: linear-gradient(135deg, #F44336, #E53935);
+  transition: all 0.3s ease;
 }
 
 .btn:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-i {
-  font-size: 1.2rem;
 }
 </style>
