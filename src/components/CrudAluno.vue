@@ -3,15 +3,14 @@
       <button @click="createStudent">Inserir novo Aluno</button>
     </div>
 
-
   <div class="student-table">
     <table>
       <thead>
         <tr>
           <th>ID</th>
           <th>Nome</th>
-          <th>Idade</th>
           <th>Gênero</th>
+          <th>Idade</th>
           <th>Ações</th>
         </tr>
       </thead>

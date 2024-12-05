@@ -1,19 +1,18 @@
 <template>
-  <div class="delete-confirmation">
+  <div class="school-details">
     <!-- Cabeçalho -->
     <SchoolHeader 
-      title="Excluir Escola" 
+      title="Detalhes da Escola" 
       :backRoute="'/escolas'" 
     />
 
-    <!-- Mensagem de Confirmação -->
-    <div class="confirmation-message">
-      <h2>Tem certeza que deseja excluir esta escola?</h2>
-      <p>Você está prestes a excluir a escola <strong>{{ school.name }}</strong>. Essa ação não pode ser desfeita.</p>
+    <!-- Informações da Escola -->
+    <div class="details-message">
+      <h2>Bem-vindo à página da escola</h2>
+      <p>Detalhes sobre a escola <strong>{{ school.name }}</strong>.</p>
 
       <div class="buttons">
-        <button @click="confirmDelete" class="btn confirm">Confirmar</button>
-        <button @click="cancelDelete" class="btn cancel">Cancelar</button>
+        <button @click="goBack" class="btn back">Voltar</button>
       </div>
     </div>
   </div>
@@ -48,27 +47,20 @@ export default {
       };
     });
 
-    const confirmDelete = () => {
-      console.log(`Escola com ID ${school.value.id} excluída.`);
-      // Adicione aqui a lógica para excluir a escola, como uma requisição para o backend
+    const goBack = () => {
       router.push('/escolas'); // Redireciona para a lista de escolas
-    };
-
-    const cancelDelete = () => {
-      router.push('/escolas'); // Redireciona para a lista de escolas sem excluir
     };
 
     return {
       school,
-      confirmDelete,
-      cancelDelete,
+      goBack,
     };
   },
 };
 </script>
 
 <style scoped>
-.delete-confirmation {
+.school-details {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
@@ -77,14 +69,14 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.confirmation-message h2 {
+.details-message h2 {
   font-size: 1.8rem;
   color: #333;
   margin-bottom: 10px;
   text-align: center;
 }
 
-.confirmation-message p {
+.details-message p {
   font-size: 1rem;
   color: #666;
   text-align: center;
@@ -93,7 +85,7 @@ export default {
 
 .buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .btn {
@@ -104,24 +96,13 @@ export default {
   transition: transform 0.2s ease, background-color 0.3s;
 }
 
-.confirm {
-  background-color: #f44336;
-  color: white;
-  border: none;
-}
-
-.confirm:hover {
-  background-color: #e53935;
-  transform: scale(1.05);
-}
-
-.cancel {
+.back {
   background-color: #4CAF50;
   color: white;
   border: none;
 }
 
-.cancel:hover {
+.back:hover {
   background-color: #45a049;
   transform: scale(1.05);
 }

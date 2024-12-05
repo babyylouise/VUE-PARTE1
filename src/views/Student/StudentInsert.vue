@@ -37,6 +37,16 @@
         />
       </div>
 
+      <div class="form-group">
+        <label for="school">Escola</label>
+        <select v-model="student.schoolId" id="school" required>
+          <option value="" disabled>Selecione uma escola</option>
+          <option v-for="school in schools" :key="school.id" :value="school.id">
+            {{ school.name }}
+          </option>
+        </select>
+      </div>
+
       <div class="form-buttons">
         <button type="submit" class="btn save" @mouseover="hoverSave" @mouseleave="resetButton">Salvar</button>
         <button type="button" @click="cancelEdit" class="btn cancel" @mouseover="hoverCancel" @mouseleave="resetButton">Cancelar</button>
@@ -44,70 +54,84 @@
     </form>
   </div>
 </template>
+
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';  // Importando o Axios
+import axios from 'axios';
 
 export default {
   setup() {
     const router = useRouter();
 
-    // Definição dos dados do estudante
     const student = ref({
       name: '',
       age: '',
       gender: '',
+      schoolId: '', // ID da escola associada
     });
 
-    // Função para salvar os dados do novo aluno
+    const schools = ref([]);
+
+    const fetchSchools = async () => {
+      try {
+        const response = await axios.get('http://localhost:8081/schools');
+        schools.value = response.data;
+      } catch (error) {
+        console.error('Erro ao buscar escolas:', error);
+      }
+    };
+
     const saveChanges = async () => {
       try {
-        // Envia os dados para criar o aluno
         const response = await axios.post(
-          'http://localhost:8081/student', // Endpoint para criação do aluno
+          'http://localhost:8081/student',
           {
             name: student.value.name,
             age: student.value.age,
             gender: student.value.gender,
+            schoolId: student.value.schoolId,
           },
           {
             headers: {
               'Content-Type': 'application/json',
-            },
+            }
           }
         );
         console.log('Estudante criado com sucesso:', response.data);
-        router.push('/alunos');  // Redireciona para a lista de estudantes
+        router.push('/alunos');
       } catch (error) {
         console.error('Erro ao criar estudante:', error);
       }
     };
 
-    // Função para cancelar a criação e voltar à lista de estudantes
     const cancelEdit = () => {
-      router.push('/alunos');  // Redireciona para a lista de estudantes
+      router.push('/alunos');
     };
 
-    // Funções para animação dos botões
     const hoverSave = (event) => {
-      event.target.style.backgroundColor = '#45a049'; // Mudança de cor ao passar o mouse
+      event.target.style.backgroundColor = '#45a049';
     };
 
     const hoverCancel = (event) => {
-      event.target.style.backgroundColor = '#e53935'; // Mudança de cor ao passar o mouse
+      event.target.style.backgroundColor = '#e53935';
     };
 
     const resetButton = (event) => {
       if (event.target.classList.contains('save')) {
-        event.target.style.backgroundColor = '#4CAF50'; // Cor inicial do botão "Salvar"
+        event.target.style.backgroundColor = '#4CAF50';
       } else if (event.target.classList.contains('cancel')) {
-        event.target.style.backgroundColor = '#f44336'; // Cor inicial do botão "Cancelar"
+        event.target.style.backgroundColor = '#f44336';
       }
     };
 
+    onMounted(() => {
+      fetchSchools();
+    });
+
     return {
       student,
+      schools,
       saveChanges,
       cancelEdit,
       hoverSave,
@@ -117,8 +141,8 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-/* Fontes modernas */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Pacifico&display=swap');
 
 .student-edit {
@@ -150,7 +174,8 @@ h2 {
   margin-bottom: 10px;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -159,7 +184,8 @@ h2 {
   font-family: 'Roboto', sans-serif;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
   border-color: #6C63FF;
   outline: none;
 }
@@ -196,9 +222,5 @@ h2 {
 .btn:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-i {
-  font-size: 1.2rem;
 }
 </style>
