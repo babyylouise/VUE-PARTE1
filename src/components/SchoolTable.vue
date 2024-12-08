@@ -7,7 +7,6 @@
           <th>Nome Da Escola</th>
           <th>Nome do Diretor</th>
           <th>Localização</th>
-          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -16,9 +15,6 @@
           <td>{{ school.principalName }}</td>
           <td>{{ school.location }}</td>
           <td>{{ school.schoolName }}</td>
-          <td class="actions">
-            <button class="btn edit" @click="$emit('edit-school', school.id)">Detalhes</button>
-          </td>
         </tr>
       </tbody>
     </table>

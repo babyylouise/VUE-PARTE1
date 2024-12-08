@@ -1,36 +1,31 @@
 <template>
   <div class="create-student-button">
-      <button @click="createStudent">Inserir novo Aluno</button>
-    </div>
+    <button @click="createStudent">Inserir novo Aluno</button>
+  </div>
 
   <div class="student-table">
     <table>
       <thead>
         <tr>
-          <th>ID</th>
           <th>Nome</th>
           <th>Gênero</th>
           <th>Idade</th>
-          <th>Ações</th>
+          <th>Escola</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="student in students" :key="student.id">
-          <td>{{ student.id }}</td>
           <td>{{ student.name }}</td>
           <td>{{ student.gender }}</td>
           <td>{{ student.age }}</td>
-          <td class="actions">
-            <button class="btn edit" @click="$emit('edit-student', student.id)">Detalhes</button>
-          </td>
+          <td>{{ getSchoolName(student.schoolId) }}</td>
         </tr>
       </tbody>
     </table>
   </div>
-
 </template>
 
-<script>
+<!-- <script>
 import StudentInsert from "@/views/Student/StudentInsert.vue";
 
 export default {
@@ -44,6 +39,58 @@ export default {
   createStudent(){
     this.$router.push({ name: 'StudentInsert'});
  },
+  }
+};
+</script> -->
+
+<script>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+export default {
+  props: {
+    students: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(props) {
+    const schools = ref([]);
+    const schoolNames = ref({});
+
+    const fetchSchools = async () => {
+      try {
+        const response = await axios.get('http://localhost:8082/school');
+        schools.value = response.data;
+        mapSchoolNames();
+      } catch (error) {
+        console.error("Erro ao buscar escolas:", error);
+      }
+    };
+
+    const mapSchoolNames = () => {
+      schools.value.forEach(school => {
+        schoolNames.value[school.id] = school.schoolName;
+      });
+    };
+
+    const getSchoolName = (schoolId) => {
+      return schoolNames.value[schoolId] || 'Carregando...';
+    };
+
+    onMounted(() => {
+      fetchSchools();
+    });
+
+    return {
+      schoolNames,
+      getSchoolName,
+    };
+  },
+  methods: {
+    createStudent() {
+      this.$router.push({ name: 'StudentInsert' });
+    },
   }
 };
 </script>

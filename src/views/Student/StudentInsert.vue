@@ -42,7 +42,7 @@
         <select v-model="student.schoolId" id="school" required>
           <option value="" disabled>Selecione uma escola</option>
           <option v-for="school in schools" :key="school.id" :value="school.id">
-            {{ school.name }}
+            {{ school.schoolName }}
           </option>
         </select>
       </div>
@@ -75,7 +75,7 @@ export default {
 
     const fetchSchools = async () => {
       try {
-        const response = await axios.get('http://localhost:8081/schools');
+        const response = await axios.get('http://localhost:8082/school');
         schools.value = response.data;
       } catch (error) {
         console.error('Erro ao buscar escolas:', error);

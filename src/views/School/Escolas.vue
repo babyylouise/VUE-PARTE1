@@ -41,7 +41,7 @@ export default {
     // Método para buscar as escolas
     async fetchSchools() {
       try {
-        const response = await axios.get('http://localhost:8080/school');
+        const response = await axios.get('http://localhost:8082/school');
         this.schools = response.data;
       } catch (error) {
         console.error("Erro ao buscar escolas:", error);
@@ -51,13 +51,17 @@ export default {
       console.log("Voltando à tela anterior...");
     },
     createStudent(schoolId) {
-      console.log(`Criar novo aluno para a escola ${schoolId}`);
+      console.log('Criar novo aluno para a escola ${schoolId}');
     },
     editSchool(schoolId) {
       this.$router.push({ name: 'SchoolEdit', params: { id: schoolId } });
     },
     deleteSchool(schoolId) {
-      console.log(`Apagar escola ${schoolId}`);
+      console.log('Apagar escola ${schoolId}');
+    },
+    getSchoolNameById(schoolId) {
+      const school = this.schools.find(s => s.id === schoolId);
+      return school ? school.name : 'Escola não encontrada';
     },
     createSchool() {
       this.$router.push({ name: 'SchoolCreate' });

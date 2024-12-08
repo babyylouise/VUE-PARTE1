@@ -35,7 +35,7 @@ export default {
     // Método para buscar os alunos
     async fetchStudents() {
       try {
-        const response = await axios.get('http://localhost:8080/student');
+        const response = await axios.get('http://localhost:8081/student');
         this.students = response.data;
       } catch (error) {
         console.error("Erro ao buscar Alunos:", error);
@@ -49,7 +49,7 @@ export default {
       this.$router.push({ name: 'editAluno', params: { id: studentId } });
     },
     deleteStudent(studentId) {
-      console.log(`Apagar aluno ${studentId}`);
+      console.log('Apagar aluno ${studentId}');
     },
     createStudent() {
       this.$router.push({ name: 'studentCreate' });
