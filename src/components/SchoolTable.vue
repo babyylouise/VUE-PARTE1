@@ -12,9 +12,10 @@
       <tbody>
         <tr v-for="school in schools" :key="school.id">
           <td>{{ school.id }}</td>
+          <td>{{ school.schoolName }}</td>
           <td>{{ school.principalName }}</td>
           <td>{{ school.location }}</td>
-          <td>{{ school.schoolName }}</td>
+
         </tr>
       </tbody>
     </table>
